@@ -2,7 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+
+
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Brand>
@@ -16,8 +19,9 @@ class BrandFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            //
-        ];
+        return array(
+            'name' => fake()->company(),
+            'user_id' => User::factory(),
+        );
     }
 }
