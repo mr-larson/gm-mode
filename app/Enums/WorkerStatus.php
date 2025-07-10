@@ -8,9 +8,9 @@ enum WorkerStatus: string
 {
     use WithDisplayName;
 
-    case Active = 'active';
-    case Injured = 'injured';
-    case Suspended = 'suspended';
-    case Retired = 'retired';
+    case active = 'Active';
+    case injured = 'Injured';
+    case suspended = 'Suspended';
+    case retired = 'Retired';
 }
 

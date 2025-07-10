@@ -8,7 +8,7 @@ enum WorkerAlignment: string
 {
     use WithDisplayName;
 
-    case face = 'face';
-    case heel = 'heel';
-    case tweener = 'tweener';
+    case face = 'Face';
+    case heel = 'Heel';
+    case tweener = 'Tweener';
 }

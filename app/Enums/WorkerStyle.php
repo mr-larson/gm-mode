@@ -8,10 +8,10 @@ enum WorkerStyle: string
 {
     use WithDisplayName;
 
-    case Brawler = 'brawler';
-    case Technician = 'technician';
-    case HighFlyer = 'high flyer';
-    case Powerhouse = 'powerhouse';
-    case Specialist = 'specialist'; // Joker : compatible avec tous
+    case brawler = 'Brawler';
+    case technician = 'Technician';
+    case highFlyer = 'High flyer';
+    case powerhouse = 'Powerhouse';
+    case specialist = 'Specialist'; // Joker : compatible avec tous
 }
 
