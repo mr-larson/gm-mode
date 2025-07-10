@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('style')->nullable();      // Brawler, High-Flyer, etc.
             $table->string('status')->nullable();     // Actif, blessé, suspendu...
             $table->string('category')->nullable();   // Main event, midcard, etc.
+            $table->string('alignment')->nullable();  // Face, Heel
 
             $table->unsignedInteger('height')->nullable();  // cm
             $table->unsignedInteger('weight')->nullable();  // kg
