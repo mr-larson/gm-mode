@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreSuperstarRequest;
-use App\Http\Requests\UpdateSuperstarRequest;
-use App\Models\Superstar;
+use App\Http\Requests\StoreWorkerRequest;
+use App\Http\Requests\UpdateWorkerRequest;
+use App\Models\Worker;
 
-class SuperstarController extends Controller
+class WorkerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,7 +27,7 @@ class SuperstarController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreSuperstarRequest $request)
+    public function store(StoreWorkerRequest $request)
     {
         //
     }
@@ -35,7 +35,7 @@ class SuperstarController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Superstar $superstar)
+    public function show(Worker $worker)
     {
         //
     }
@@ -43,7 +43,7 @@ class SuperstarController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Superstar $superstar)
+    public function edit(Worker $worker)
     {
         //
     }
@@ -51,7 +51,7 @@ class SuperstarController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateSuperstarRequest $request, Superstar $superstar)
+    public function update(UpdateWorkerRequest $request, Worker $worker)
     {
         //
     }
@@ -59,7 +59,7 @@ class SuperstarController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Superstar $superstar)
+    public function destroy(Worker $worker)
     {
         //
     }
