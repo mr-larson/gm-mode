@@ -2,6 +2,10 @@
 
 namespace Database\Seeders;
 
+use App\Enums\WorkerCategory;
+use App\Enums\WorkerGender;
+use App\Enums\WorkerStatus;
+use App\Enums\WorkerStyle;
 use App\Models\Brand;
 use App\Models\User;
 use App\Models\Worker;
@@ -65,11 +69,11 @@ class WorkerSeeder extends Seeder
                 'firstname' => explode(' ', $name)[0],
                 'lastname' => implode(' ', array_slice(explode(' ', $name), 1)),
                 'nickname' => null,
-                'gender' => 'Man',
+                'gender' => WorkerGender::male->value,
                 'age' => rand(25, 55),
-                'style' => 'Brawler',
-                'status' => 'Active',
-                'category' => 'Heavyweight',
+                'style' => WorkerStyle::brawler->value,
+                'status' => WorkerStatus::active->value,
+                'category' => WorkerCategory::heavyweight->value,
                 'height' => rand(170, 220),
                 'weight' => rand(90, 150),
                 'image' => null,

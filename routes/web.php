@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\WorkerController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,6 +30,9 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/{brand}', [BrandController::class, 'show'])->name('brands.show');
+
+    Route::get('/workers', [WorkerController::class, 'index'])->name('workers.index');
+    Route::get('/workers/{worker}', [WorkerController::class, 'show'])->name('workers.show');
 
 });
 

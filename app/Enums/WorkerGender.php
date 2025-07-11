@@ -8,7 +8,7 @@ enum WorkerGender: string
 {
     use WithDisplayName;
 
-    case man = 'Man';
-    case woman = 'Woman';
-
+    case male = 'Male';
+    case female = 'Female';
 }
+
