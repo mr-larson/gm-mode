@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 use App\Models\Brand;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class BrandController extends Controller
 {
@@ -13,7 +15,11 @@ class BrandController extends Controller
      */
     public function index()
     {
-        //
+        $brands = Brand::withCount('workers')->get();
+
+        return Inertia::render('Brands/Index', [
+            'brands' => $brands
+        ]);
     }
 
     /**
@@ -37,7 +43,11 @@ class BrandController extends Controller
      */
     public function show(Brand $brand)
     {
-        //
+        $brand->load(['workers']);
+
+        return Inertia::render('Brands/Show', [
+            'brand' => $brand
+        ]);
     }
 
     /**
