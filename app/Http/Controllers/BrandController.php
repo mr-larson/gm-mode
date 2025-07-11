@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 use App\Models\Brand;
+use App\Models\Worker;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -72,5 +73,13 @@ class BrandController extends Controller
     public function destroy(Brand $brand)
     {
         //
+    }
+
+    public function resetStats(Brand $brand)
+    {
+        Worker::resetStatsByBrand($brand->id);
+
+        return redirect()->route('dashboard')
+            ->with('success', "Statistiques de la brand {$brand->name} réinitialisées !");
     }
 }

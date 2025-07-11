@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BrandController;
@@ -17,24 +16,28 @@ Route::get('/', function () {
     ]);
 });
 
+// ✅ Dashboard — Single Action Controller
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+// ✅ Profil utilisateur
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
+// ✅ Gestion Brands & Workers
 Route::middleware(['auth', 'verified'])->group(function () {
+    // Brands
     Route::get('/brands', [BrandController::class, 'index'])->name('brands.index');
     Route::get('/brands/{brand}', [BrandController::class, 'show'])->name('brands.show');
+    Route::post('/brands/{brand}/reset-stats', [BrandController::class, 'resetStats'])->name('brands.resetStats');
 
+    // Workers
     Route::get('/workers', [WorkerController::class, 'index'])->name('workers.index');
     Route::get('/workers/{worker}', [WorkerController::class, 'show'])->name('workers.show');
-
 });
 
 require __DIR__.'/auth.php';

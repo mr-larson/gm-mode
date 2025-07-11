@@ -14,8 +14,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Worker extends Model
 {
-    use HasFactory;
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'workers';
 
@@ -48,26 +47,25 @@ class Worker extends Model
     ];
 
     protected $casts = [
-        'gender' => WorkerGender::class,
-        'status' => WorkerStatus::class,
-        'category' => WorkerCategory::class,
-        'style' => WorkerStyle::class,
+        'gender'    => WorkerGender::class,
+        'status'    => WorkerStatus::class,
+        'category'  => WorkerCategory::class,
+        'style'     => WorkerStyle::class,
         'alignment' => WorkerAlignment::class,
 
-        'age' => 'integer',
-        'height' => 'integer',
-        'weight' => 'integer',
-        'overall' => 'integer',
-        'popularity' => 'integer',
-        'endurance' => 'integer',
+        'age'         => 'integer',
+        'height'      => 'integer',
+        'weight'      => 'integer',
+        'overall'     => 'integer',
+        'popularity'  => 'integer',
+        'endurance'   => 'integer',
         'promo_skill' => 'integer',
-        'wins' => 'integer',
-        'draws' => 'integer',
-        'losses' => 'integer',
+        'wins'        => 'integer',
+        'draws'       => 'integer',
+        'losses'      => 'integer',
     ];
 
-    // Relations
-
+    // 🔗 Relations
     public function brand(): BelongsTo
     {
         return $this->belongsTo(Brand::class);
@@ -78,8 +76,7 @@ class Worker extends Model
         return $this->belongsTo(User::class);
     }
 
-    // Accessors
-
+    // 🧾 Accessors
     public function getFullNameAttribute(): string
     {
         return trim("{$this->firstname} {$this->lastname}");
@@ -87,6 +84,22 @@ class Worker extends Model
 
     public function getPerformanceScoreAttribute(): int
     {
-        return $this->wins * 3 + $this->draws;
+        return ($this->wins * 3) + ($this->draws * 1);
+    }
+
+    public function getWinRateAttribute(): float
+    {
+        $total = $this->wins + $this->draws + $this->losses;
+        return $total > 0 ? round(($this->wins / $total) * 100, 1) : 0;
+    }
+
+    // 🔄 Reset des stats pour une brand
+    public static function resetStatsByBrand(int $brandId): void
+    {
+        self::where('brand_id', $brandId)->update([
+            'wins'   => 0,
+            'draws'  => 0,
+            'losses' => 0,
+        ]);
     }
 }
