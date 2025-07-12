@@ -2,6 +2,8 @@
 import {Link, router} from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import FilterSelect from '@/Components/FilterSelect.vue'
+
 
 const props = defineProps({
     workers: Array,
@@ -76,54 +78,30 @@ function sortBy(column) {
                     <!-- Filtres à gauche -->
                     <div class="flex flex-wrap gap-6">
                         <!-- Brand -->
-                        <div class="flex items-center gap-2">
-                            <label class="text-sm font-medium text-gray-700">Brand</label>
-                            <select
-                                v-model="brandFilter"
-                                @change="applyFilters"
-                                class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            >
-                                <option value="">-- Toutes --</option>
-                                <option
-                                    v-for="brand in brands"
-                                    :key="brand.id"
-                                    :value="brand.id"
-                                    :style="{ backgroundColor: brand.color, color: '#fff' }"
-                                >
-                                    {{ brand.name }}
-                                </option>
-                            </select>
-                        </div>
+                        <FilterSelect
+                            label="Brand"
+                            v-model="brandFilter"
+                            :options="brands.map(b => ({ value: b.id, label: b.name, color: b.color }))"
+                            placeholder="-- Toutes --"
+                            :onChange="applyFilters"
+                        />
 
                         <!-- Catégorie -->
-                        <div class="flex items-center gap-2">
-                            <label class="text-sm font-medium text-gray-700">Catégorie</label>
-                            <select
-                                v-model="categoryFilter"
-                                @change="applyFilters"
-                                class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            >
-                                <option value="">-- Toutes --</option>
-                                <option v-for="cat in categories" :key="cat.value" :value="cat.value">
-                                    {{ cat.label }}
-                                </option>
-                            </select>
-                        </div>
+                        <FilterSelect
+                            label="Catégorie"
+                            v-model="categoryFilter"
+                            :options="categories"
+                            placeholder="-- Toutes --"
+                            :onChange="applyFilters"
+                        />
 
                         <!-- Style -->
-                        <div class="flex items-center gap-2">
-                            <label class="text-sm font-medium text-gray-700">Style</label>
-                            <select
-                                v-model="styleFilter"
-                                @change="applyFilters"
-                                class="block w-40 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                            >
-                                <option value="">-- Tous --</option>
-                                <option v-for="style in styles" :key="style.value" :value="style.value">
-                                    {{ style.label }}
-                                </option>
-                            </select>
-                        </div>
+                        <FilterSelect
+                            label="Style"
+                            v-model="styleFilter"
+                            :options="styles"
+                            :onChange="applyFilters"
+                        />
                     </div>
 
                     <!-- Bouton reset si au moins un filtre actif -->
