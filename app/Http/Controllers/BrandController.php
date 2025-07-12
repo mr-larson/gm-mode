@@ -16,7 +16,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::withCount('workers')->get();
+        $brands = Brand::with(['workers'])->withCount('workers')->get();
+
 
         return Inertia::render('Brands/Index', [
             'brands' => $brands
