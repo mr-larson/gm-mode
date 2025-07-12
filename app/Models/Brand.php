@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\BrandColor;
 use App\Enums\BrandStyle;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ class Brand extends Model
     protected $casts = [
         'founded' => 'date',
         'style' => BrandStyle::class,
+        'color' => BrandColor::class,
     ];
 
     // Relations

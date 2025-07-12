@@ -18,7 +18,7 @@ defineProps({
                 :style="{ borderColor: brand.color ?? '#ccc' }"
             >
                 <h2 class="text-xl font-semibold mb-2">
-                    <Link :href="route('brands.show', brand.id)" class="text-blue-600 hover:underline">
+                    <Link :href="route('brands.show', brand.id)" class="hover:underline">
                         {{ brand.name }}
                     </Link>
                 </h2>
