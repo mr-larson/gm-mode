@@ -1,9 +1,9 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3'
+import { router } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import FilterSelect from '@/Components/FilterSelect.vue'
-
+import WorkerModal from './Partials/WorkerModal.vue'
 
 const props = defineProps({
     workers: Array,
@@ -20,6 +20,15 @@ const styleFilter = ref(props.filters.style || '')
 const sort = ref(props.filters.sort || 'lastname')
 const direction = ref(props.filters.direction || 'asc')
 
+// Modale
+const selectedWorker = ref(null)
+const showModal = ref(false)
+
+function openModal(worker) {
+    selectedWorker.value = worker
+    showModal.value = true
+}
+
 // Appliquer les filtres
 function applyFilters() {
     router.get(route('workers.index'), {
@@ -33,6 +42,7 @@ function applyFilters() {
         preserveState: true,
     })
 }
+
 const hasActiveFilters = computed(() => {
     return brandFilter.value || categoryFilter.value || styleFilter.value
 })
@@ -43,10 +53,8 @@ function resetFilters() {
     styleFilter.value = ''
     sort.value = 'lastname'
     direction.value = 'asc'
-
     applyFilters()
 }
-
 
 // Tri dynamique
 function sortBy(column) {
@@ -56,7 +64,6 @@ function sortBy(column) {
         sort.value = column
         direction.value = 'asc'
     }
-
     applyFilters()
 }
 </script>
@@ -75,9 +82,7 @@ function sortBy(column) {
             <!-- Filtres -->
             <div class="bg-white p-4 rounded-lg shadow mb-6">
                 <div class="flex flex-wrap justify-between items-center gap-6">
-                    <!-- Filtres à gauche -->
                     <div class="flex flex-wrap gap-6">
-                        <!-- Brand -->
                         <FilterSelect
                             label="Brand"
                             v-model="brandFilter"
@@ -85,8 +90,6 @@ function sortBy(column) {
                             placeholder="-- Toutes --"
                             :onChange="applyFilters"
                         />
-
-                        <!-- Catégorie -->
                         <FilterSelect
                             label="Catégorie"
                             v-model="categoryFilter"
@@ -94,8 +97,6 @@ function sortBy(column) {
                             placeholder="-- Toutes --"
                             :onChange="applyFilters"
                         />
-
-                        <!-- Style -->
                         <FilterSelect
                             label="Style"
                             v-model="styleFilter"
@@ -104,7 +105,6 @@ function sortBy(column) {
                         />
                     </div>
 
-                    <!-- Bouton reset si au moins un filtre actif -->
                     <div v-if="hasActiveFilters" class="ml-auto">
                         <button
                             @click="resetFilters"
@@ -138,18 +138,25 @@ function sortBy(column) {
                         class="hover:bg-gray-50 border-t"
                     >
                         <td class="p-3">
-                            <Link :href="route('workers.show', worker.id)" class="text-blue-600 hover:underline">
+                            <button @click="openModal(worker)" class="text-blue-600 hover:underline">
                                 {{ worker.firstname }} {{ worker.lastname }}
-                            </Link>
+                            </button>
                         </td>
                         <td class="p-3">{{ worker.category }}</td>
                         <td class="p-3">{{ worker.style }}</td>
                         <td class="p-3">{{ worker.popularity }}</td>
-                        <td class="p-2 border">{{ worker.current_contract?.brand?.name ?? 'Libre' }}</td>
+                        <td class="p-3">{{ worker.current_contract?.brand?.name ?? 'Libre' }}</td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+
+            <!-- Modal -->
+            <WorkerModal
+                :show="showModal"
+                :worker="selectedWorker"
+                @close="showModal = false"
+            />
         </div>
     </AuthenticatedLayout>
 </template>

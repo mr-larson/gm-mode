@@ -14,9 +14,6 @@ use Inertia\Response;
 
 class WorkerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request): Response
     {
         $query = Worker::query()->with('currentContract.brand');
@@ -44,9 +41,35 @@ class WorkerController extends Controller
             $query->orderBy($sortField, $sortDirection);
         }
 
-        $workers = $query->get();
+        // Récupération
+        $workers = $query->get()->map(fn ($worker) => [
+            'id' => $worker->id,
+            'firstname' => $worker->firstname,
+            'lastname' => $worker->lastname,
+            'nickname' => $worker->nickname,
+            'gender' => $worker->gender,
+            'age' => $worker->age,
+            'style' => $worker->style,
+            'status' => $worker->status,
+            'category' => $worker->category,
+            'alignment' => $worker->alignment,
+            'height' => $worker->height,
+            'weight' => $worker->weight,
+            'overall' => $worker->overall,
+            'popularity' => $worker->popularity,
+            'endurance' => $worker->endurance,
+            'promo_skill' => $worker->promo_skill,
+            'wins' => $worker->wins,
+            'draws' => $worker->draws,
+            'losses' => $worker->losses,
+            'note' => $worker->note,
+            'performanceScore' => $worker->performance_score,
+            'fullName' => $worker->full_name,
+            'current_contract' => [
+                'brand' => optional($worker->currentContract?->brand)->only(['id', 'name', 'color']),
+            ],
+        ]);
 
-        // Format enums pour le front
         $categories = collect(WorkerCategory::cases())->map(fn($case) => [
             'label' => $case->displayName(),
             'value' => $case->value,
@@ -59,44 +82,52 @@ class WorkerController extends Controller
 
         return Inertia::render('Workers/Index', [
             'workers' => $workers,
-            'brands' => Brand::all(['id', 'name']),
+            'brands' => Brand::all(['id', 'name', 'color']),
             'categories' => $categories,
             'styles' => $styles,
             'filters' => $request->only(['brand_id', 'category', 'style', 'sort', 'direction']),
         ]);
     }
 
-    public function create()
-    {
-        //
-    }
-
-    public function store(StoreWorkerRequest $request)
-    {
-        //
-    }
-
-    public function show(Worker $worker): Response
+    /**
+     * Optionnel : API JSON d’un seul worker pour modal AJAX (si besoin).
+     */
+    public function show(Worker $worker)
     {
         $worker->load('currentContract.brand');
 
-        return Inertia::render('Workers/Show', [
-            'worker' => $worker
+        return response()->json([
+            'id' => $worker->id,
+            'firstname' => $worker->firstname,
+            'lastname' => $worker->lastname,
+            'nickname' => $worker->nickname,
+            'gender' => $worker->gender,
+            'age' => $worker->age,
+            'style' => $worker->style,
+            'status' => $worker->status,
+            'category' => $worker->category,
+            'alignment' => $worker->alignment,
+            'height' => $worker->height,
+            'weight' => $worker->weight,
+            'overall' => $worker->overall,
+            'popularity' => $worker->popularity,
+            'endurance' => $worker->endurance,
+            'promo_skill' => $worker->promo_skill,
+            'wins' => $worker->wins,
+            'draws' => $worker->draws,
+            'losses' => $worker->losses,
+            'note' => $worker->note,
+            'performanceScore' => $worker->performance_score,
+            'fullName' => $worker->full_name,
+            'current_contract' => [
+                'brand' => optional($worker->currentContract?->brand)->only(['id', 'name', 'color']),
+            ],
         ]);
     }
 
-    public function edit(Worker $worker)
-    {
-        //
-    }
-
-    public function update(UpdateWorkerRequest $request, Worker $worker)
-    {
-        //
-    }
-
-    public function destroy(Worker $worker)
-    {
-        //
-    }
+    public function create() {}
+    public function store(StoreWorkerRequest $request) {}
+    public function edit(Worker $worker) {}
+    public function update(UpdateWorkerRequest $request, Worker $worker) {}
+    public function destroy(Worker $worker) {}
 }
