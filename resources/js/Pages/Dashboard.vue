@@ -96,7 +96,7 @@ onMounted(() => {
 const rankedWorkers = computed(() => {
     if (!selectedBrandId.value) return []
     return props.workers
-        .filter(w => w.brand_id === +selectedBrandId.value)
+        .filter(w => w.current_contract?.brand_id === +selectedBrandId.value)
         .sort((a, b) => b.performanceScore - a.performanceScore)
 })
 

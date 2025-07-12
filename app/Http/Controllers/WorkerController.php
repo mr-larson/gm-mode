@@ -19,11 +19,13 @@ class WorkerController extends Controller
      */
     public function index(Request $request): Response
     {
-        $query = Worker::query()->with('brand');
+        $query = Worker::query()->with('currentContract.brand');
 
         // Filtres
         if ($request->filled('brand_id')) {
-            $query->where('brand_id', $request->brand_id);
+            $query->whereHas('currentContract', function ($q) use ($request) {
+                $q->where('brand_id', $request->brand_id);
+            });
         }
 
         if ($request->filled('category') && WorkerCategory::tryFrom($request->category)) {
@@ -76,7 +78,7 @@ class WorkerController extends Controller
 
     public function show(Worker $worker): Response
     {
-        $worker->load('brand');
+        $worker->load('currentContract.brand');
 
         return Inertia::render('Workers/Show', [
             'worker' => $worker

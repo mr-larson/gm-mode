@@ -145,7 +145,7 @@ function sortBy(column) {
                         <td class="p-3">{{ worker.category }}</td>
                         <td class="p-3">{{ worker.style }}</td>
                         <td class="p-3">{{ worker.popularity }}</td>
-                        <td class="p-3">{{ worker.brand?.name ?? 'Libre' }}</td>
+                        <td class="p-2 border">{{ worker.current_contract?.brand?.name ?? 'Libre' }}</td>
                     </tr>
                     </tbody>
                 </table>

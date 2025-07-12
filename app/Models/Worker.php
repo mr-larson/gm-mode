@@ -66,9 +66,14 @@ class Worker extends Model
     ];
 
     // 🔗 Relations
-    public function brand(): BelongsTo
+    public function contracts()
     {
-        return $this->belongsTo(Brand::class);
+        return $this->hasMany(Contract::class);
+    }
+
+    public function currentContract()
+    {
+        return $this->hasOne(Contract::class)->where('is_active', true);
     }
 
     public function user(): BelongsTo

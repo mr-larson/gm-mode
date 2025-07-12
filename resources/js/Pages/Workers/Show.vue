@@ -33,7 +33,7 @@ const props = defineProps({
                 <p><strong>Victoire/Égalité/Défaites :</strong>
                     {{ worker.wins }} / {{ worker.draws }} / {{ worker.losses }}
                 </p>
-                <p><strong>Brand :</strong> {{ worker.brand?.name || 'Libre' }}</p>
+                <p><strong>Brand :</strong> {{ worker.current_contract?.brand?.name || 'Libre' }}</p>
             </div>
         </div>
 

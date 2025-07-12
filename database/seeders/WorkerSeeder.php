@@ -6,7 +6,6 @@ use App\Enums\WorkerCategory;
 use App\Enums\WorkerGender;
 use App\Enums\WorkerStatus;
 use App\Enums\WorkerStyle;
-use App\Models\Brand;
 use App\Models\User;
 use App\Models\Worker;
 use Illuminate\Database\Seeder;
@@ -16,7 +15,6 @@ class WorkerSeeder extends Seeder
     public function run(): void
     {
         $user = User::first();
-        $brands = Brand::all();
 
         $workers = [
             'André the Giant',
@@ -63,8 +61,6 @@ class WorkerSeeder extends Seeder
         ];
 
         foreach ($workers as $name) {
-            $brand = $brands->random();
-
             Worker::create([
                 'firstname' => explode(' ', $name)[0],
                 'lastname' => implode(' ', array_slice(explode(' ', $name), 1)),
@@ -85,7 +81,6 @@ class WorkerSeeder extends Seeder
                 'draws' => rand(0, 10),
                 'losses' => rand(20, 100),
                 'note' => null,
-                'brand_id' => $brand->id,
                 'user_id' => $user->id,
                 'created_by' => $user->id,
                 'updated_by' => $user->id,

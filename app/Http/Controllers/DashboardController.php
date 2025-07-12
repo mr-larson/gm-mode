@@ -6,28 +6,33 @@ use App\Models\Brand;
 use App\Models\Worker;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Contract;
 
 class DashboardController extends Controller
 {
+
     public function __invoke(): Response
     {
-        $brands = Brand::select('id','name','money','popularity','color')->get();
-        $workers = Worker::with('brand')
-            ->get(['id','firstname','lastname','wins','draws','losses','brand_id'])
+        $brands = Brand::select('id', 'name', 'money', 'popularity', 'color')->get();
+
+        $workers = Worker::with('currentContract')
+            ->get()
             ->map(fn($w) => [
                 'id' => $w->id,
-                'firstname' => $w->firstname,
-                'lastname' => $w->lastname,
+                'fullName' => $w->fullName,
+                'performanceScore' => $w->performanceScore,
                 'wins' => $w->wins,
                 'draws' => $w->draws,
                 'losses' => $w->losses,
-                'brand_id' => $w->brand_id,
-                /** Accesseurs */
-                'fullName' => $w->fullName,
-                'performanceScore' => $w->performanceScore,
+                'current_contract' => [
+                    'brand_id' => $w->currentContract?->brand_id,
+                ]
             ]);
 
-        return Inertia::render('Dashboard', compact('brands', 'workers'));
+        return Inertia::render('Dashboard', [
+            'brands' => $brands,
+            'workers' => $workers,
+        ]);
     }
 
 }

@@ -38,16 +38,30 @@ class Brand extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function workers(): HasMany
+    public function contracts()
     {
-        return $this->hasMany(Worker::class);
+        return $this->hasMany(Contract::class);
+    }
+
+    public function workers()
+    {
+        return $this->hasManyThrough(
+            Worker::class,
+            Contract::class,
+            'brand_id',
+            'id',
+            'id',
+            'worker_id'
+        )->where('contracts.is_active', true);
     }
 
     public function getRankedWorkersAttribute()
     {
-        return $this->workers
+        return $this->workers()
+            ->get()
             ->sortByDesc(fn($worker) => $worker->wins * 3 + $worker->draws);
     }
+
 
 }
 
