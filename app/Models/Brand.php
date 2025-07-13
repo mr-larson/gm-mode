@@ -55,6 +55,12 @@ class Brand extends Model
         )->where('contracts.is_active', true);
     }
 
+    public function shows()
+    {
+        return $this->hasMany(Show::class);
+    }
+
+// Accessors
     public function getRankedWorkersAttribute()
     {
         return $this->workers()
