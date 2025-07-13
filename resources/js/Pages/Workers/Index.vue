@@ -117,10 +117,12 @@ function sortBy(column) {
                     <thead class="bg-slate-600 text-white">
                     <tr>
                         <th @click="sortBy('lastname')" class="p-3 text-left cursor-pointer">Nom</th>
+                        <th @click="sortBy('brand')" class="p-3 text-left cursor-pointer">Brand</th>
                         <th @click="sortBy('category')" class="p-3 text-left cursor-pointer">Catégorie</th>
                         <th @click="sortBy('style')" class="p-3 text-left cursor-pointer">Style</th>
                         <th @click="sortBy('popularity')" class="p-3 text-left cursor-pointer">Popularité</th>
-                        <th @click="sortBy('brand')" class="p-3 text-left cursor-pointer">Brand</th>
+                        <th @click="sortBy('overall')" class="p-3 text-left cursor-pointer">Note</th>
+                        <th @click="sortBy('promo')" class="p-3 text-left cursor-pointer">Promo</th>
                         <th @click="sortBy('endurance')" class="p-3 text-left cursor-pointer">Endurance</th>
                         <th @click="sortBy('performanceScore')" class="p-3 text-left cursor-pointer">Score</th>
                     </tr>
@@ -136,10 +138,12 @@ function sortBy(column) {
                                 {{ worker.firstname }} {{ worker.lastname }}
                             </button>
                         </td>
+                        <td class="p-3">{{ worker.current_contract?.brand?.name ?? 'Libre' }}</td>
                         <td class="p-3">{{ worker.category }}</td>
                         <td class="p-3">{{ worker.style }}</td>
                         <td class="p-3">{{ worker.popularity }}</td>
-                        <td class="p-3">{{ worker.current_contract?.brand?.name ?? 'Libre' }}</td>
+                        <td class="p-3">{{ worker.overall }}</td>
+                        <td class="p-3">{{ worker.promo }}</td>
                         <td class="p-3">
                             <span
                                 class="inline-block px-2 py-1 rounded text-xs font-medium"

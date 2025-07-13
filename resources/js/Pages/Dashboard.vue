@@ -138,7 +138,7 @@ function confirmReset(e) {
             </div>
 
             <!-- Classement par Brand -->
-            <div class="bg-white dark:bg-gray-800 border-l-8 border-gray-400 rounded-xl shadow p-6">
+            <div class="bg-white dark:bg-gray-800 border-l-8 border-slate-600 rounded-xl shadow p-6">
                 <div class="flex flex-wrap justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-100">
                         🏆 Top Performers par Promotion
@@ -151,28 +151,48 @@ function confirmReset(e) {
                 </div>
 
                 <div v-if="rankedWorkers.length">
-                    <table class="min-w-full text-sm border-collapse">
-                        <thead class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-white">
-                        <tr>
-                            <th class="p-2 border text-left">#</th>
-                            <th class="p-2 border text-left">Worker</th>
-                            <th class="p-2 border text-left">Score</th>
-                            <th class="p-2 border text-left">W / D / L</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr v-for="(w, idx) in rankedWorkers" :key="w.id" class="hover:bg-slate-50 dark:hover:bg-slate-700">
-                            <td class="p-2 border">{{ idx + 1 }}</td>
-                            <td class="p-2 border">
-                                <Link :href="route('workers.show', w.id)" class="text-blue-600 hover:underline">
-                                    {{ w.fullName }}
-                                </Link>
-                            </td>
-                            <td class="p-2 border">{{ w.performanceScore }}</td>
-                            <td class="p-2 border">{{ w.wins }} / {{ w.draws }} / {{ w.losses }}</td>
-                        </tr>
-                        </tbody>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
+                        <table class="min-w-full text-sm text-slate-700 dark:text-gray-200">
+                            <thead class="bg-slate-600 text-white">
+                            <tr>
+                                <th class="p-2 text-left">#</th>
+                                <th class="p-2 text-left">Worker</th>
+                                <th class="p-2 text-left">Score</th>
+                                <th class="p-2 text-left">W / D / L</th>
+                                <th class="p-2 text-left">Fatigue</th>
+                                <th class="p-2 text-left">Overall</th>
+                                <th class="p-2 text-left">Popularité</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(w, idx) in rankedWorkers" :key="w.id" class="hover:bg-slate-50 dark:hover:bg-slate-700">
+                                <td class="p-2">{{ idx + 1 }}</td>
+                                <td class="p-2">
+                                    <Link :href="route('workers.show', w.id)" class="text-blue-600 hover:underline">
+                                        {{ w.fullName }}
+                                    </Link>
+                                </td>
+                                <td class="p-2">{{ w.performanceScore }}</td>
+                                <td class="p-2">{{ w.wins }} / {{ w.draws }} / {{ w.losses }}</td>
+                                <td class="p-3">
+                            <span
+                                class="inline-block px-2 py-1 rounded text-xs font-medium"
+                                :class="{
+                                    'bg-green-100 text-green-800': w.endurance >= 70,
+                                    'bg-yellow-100 text-yellow-800': w.endurance >= 40 && w.endurance < 70,
+                                    'bg-red-100 text-red-800': w.endurance < 40,
+                                }"
+                                :title="`${w.endurance ?? 'Inconnu'} d’endurance`"
+                            >
+                                {{ w.endurance ?? '—' }}
+                            </span>
+                                </td>
+                                <td class="p-2">{{ w.overall }}</td>
+                                <td class="p-2">{{ w.popularity }}</td>
+                            </tr>
+                            </tbody>
                     </table>
+                    </div>
                 </div>
 
                 <p v-else class="text-gray-500 dark:text-gray-400 text-center py-6">

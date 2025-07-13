@@ -35,7 +35,7 @@ class WorkerController extends Controller
         $sortField = $request->get('sort', 'lastname');
         $sortDirection = $request->get('direction', 'asc');
 
-        if (in_array($sortField, ['lastname', 'firstname', 'popularity', 'overall', 'endurance'])) {
+        if (in_array($sortField, ['lastname', 'firstname', 'popularity', 'overall', 'endurance', 'promo_skill'])) {
             $query->orderBy($sortField, $sortDirection);
         }
 
@@ -51,7 +51,7 @@ class WorkerController extends Controller
                 ->select('workers.*');
         }
 
-        // 📦 Chargement
+        // 📦 Données
         $workers = $query->get()->map(fn ($worker) => [
             'id' => $worker->id,
             'firstname' => $worker->firstname,
@@ -68,7 +68,7 @@ class WorkerController extends Controller
             'overall' => $worker->overall,
             'popularity' => $worker->popularity,
             'endurance' => $worker->endurance,
-            'promo_skill' => $worker->promo_skill,
+            'promo' => $worker->promo_skill, // Pour la vue
             'wins' => $worker->wins,
             'draws' => $worker->draws,
             'losses' => $worker->losses,

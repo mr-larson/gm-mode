@@ -10,7 +10,7 @@ enum WorkerStyle: string
 
     case brawler = 'Brawler';
     case technician = 'Technician';
-    case highFlyer = 'High flyer';
+    case highflyer = 'High flyer';
     case powerhouse = 'Powerhouse';
     case specialist = 'Specialist'; // Joker : compatible avec tous
 }
