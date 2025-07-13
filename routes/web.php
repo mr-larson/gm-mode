@@ -16,6 +16,13 @@ Route::get('/', function () {
     ]);
 });
 
+use App\Http\Controllers\GameSessionController;
+
+Route::get('/sessions/create', [GameSessionController::class, 'create'])->name('sessions.create');
+Route::post('/sessions', [GameSessionController::class, 'store'])->name('sessions.store');
+Route::get('/sessions/{session}/dashboard', [GameSessionController::class, 'dashboard'])->name('sessions.dashboard');
+
+
 // ✅ Dashboard — Single Action Controller
 Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified'])

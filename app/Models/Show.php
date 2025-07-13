@@ -27,6 +27,11 @@ class Show extends Model
     |--------------------------------------------------------------------------
     */
 
+    public function gameSession()
+    {
+        return $this->belongsTo(GameSession::class);
+    }
+
     public function brand()
     {
         return $this->belongsTo(Brand::class);

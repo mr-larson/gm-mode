@@ -38,6 +38,11 @@ class Brand extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function gameSession()
+    {
+        return $this->belongsTo(GameSession::class);
+    }
+
     public function contracts()
     {
         return $this->hasMany(Contract::class);
