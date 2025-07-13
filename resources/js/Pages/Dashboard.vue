@@ -13,7 +13,7 @@ const props = defineProps({
     workers: Array, // workers avec fullName, performanceScore, brand info
 })
 
-// 🎯 Pour le select de brand
+// Pour le select de brand
 const selectedBrandId = ref(null)
 
 // Tri et données graphiques
@@ -84,7 +84,7 @@ function renderChart(canvasEl, data) {
     canvasEl.chart = chart
 }
 
-// 🎨 Render charts on mount
+// Render charts on mount
 onMounted(() => {
     nextTick(() => {
         renderChart(budgetCanvas.value, budgetData.value)
@@ -92,7 +92,7 @@ onMounted(() => {
     })
 })
 
-// 📊 Workers filtrés et triés
+// Workers filtrés et triés
 const rankedWorkers = computed(() => {
     if (!selectedBrandId.value) return []
     return props.workers
@@ -100,7 +100,7 @@ const rankedWorkers = computed(() => {
         .sort((a, b) => b.performanceScore - a.performanceScore)
 })
 
-// 🔄 Reset stats
+// Reset stats
 function confirmReset(e) {
     if (!confirm("Confirmer la réinitialisation des statistiques de cette brand ?")) {
         e.preventDefault()
@@ -113,54 +113,55 @@ function confirmReset(e) {
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                Dashboard
+            <h2 class="text-xl font-semibold leading-tight text-slate-700 dark:text-slate-200">
+                Tableau de bord
             </h2>
         </template>
 
-        <div class="p-4 space-y-8">
+        <div class="p-6 space-y-10">
 
-            <!-- 📊 Graphiques Budget & Popularité -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="border border-green-300 bg-white rounded-lg p-4">
-                    <div class="bg-green-100 px-3 py-2 rounded text-green-700 font-semibold mb-2">
+            <!-- Graphiques -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="rounded-xl bg-white border-l-8 shadow p-4" style="border-color: #10b981">
+                    <h3 class="text-lg font-semibold text-green-700 mb-2">
                         Classement par Budget
-                    </div>
+                    </h3>
                     <canvas ref="budgetCanvas" class="w-full h-80"></canvas>
                 </div>
 
-                <div class="border border-blue-300 bg-white rounded-lg p-4">
-                    <div class="bg-blue-100 px-3 py-2 rounded text-blue-700 font-semibold mb-2">
+                <div class="rounded-xl bg-white border-l-8 shadow p-4" style="border-color: #3b82f6">
+                    <h3 class="text-lg font-semibold text-blue-700 mb-2">
                         Classement par Popularité
-                    </div>
+                    </h3>
                     <canvas ref="popularityCanvas" class="w-full h-80"></canvas>
                 </div>
             </div>
 
-            <!-- 🏆 Classement des Workers par Brand -->
-            <div class="border border-gray-400 rounded-lg p-4 bg-white dark:bg-gray-800 shadow">
-                <div class="flex justify-between items-center mb-4 bg-gray-200 px-3 py-2 rounded text-gray-600 font-semibold">
-                    <h3 class="text-lg font-semibold">
-                        Classement par Promotion
+            <!-- Classement par Brand -->
+            <div class="bg-white dark:bg-gray-800 border-l-8 border-gray-400 rounded-xl shadow p-6">
+                <div class="flex flex-wrap justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-slate-700 dark:text-slate-100">
+                        🏆 Top Performers par Promotion
                     </h3>
-                    <select v-model="selectedBrandId" class="border rounded px-2 py-1">
-                        <option value="">-- Sélectionner une brand --</option>
+
+                    <select v-model="selectedBrandId" class="border rounded px-3 py-1 text-sm">
+                        <option value="">-- Sélectionner une promotion --</option>
                         <option v-for="b in props.brands" :key="b.id" :value="b.id">{{ b.name }}</option>
                     </select>
                 </div>
 
                 <div v-if="rankedWorkers.length">
-                    <table class="w-full text-sm border-collapse">
-                        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-white">
+                    <table class="min-w-full text-sm border-collapse">
+                        <thead class="bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-white">
                         <tr>
-                            <th class="p-2 border">#</th>
-                            <th class="p-2 border">Worker</th>
-                            <th class="p-2 border">Score</th>
-                            <th class="p-2 border">W / D / L</th>
+                            <th class="p-2 border text-left">#</th>
+                            <th class="p-2 border text-left">Worker</th>
+                            <th class="p-2 border text-left">Score</th>
+                            <th class="p-2 border text-left">W / D / L</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="(w, idx) in rankedWorkers" :key="w.id" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <tr v-for="(w, idx) in rankedWorkers" :key="w.id" class="hover:bg-slate-50 dark:hover:bg-slate-700">
                             <td class="p-2 border">{{ idx + 1 }}</td>
                             <td class="p-2 border">
                                 <Link :href="route('workers.show', w.id)" class="text-blue-600 hover:underline">
@@ -175,24 +176,26 @@ function confirmReset(e) {
                 </div>
 
                 <p v-else class="text-gray-500 dark:text-gray-400 text-center py-6">
-                    Sélectionnez une brand pour afficher son classement.
+                    Sélectionnez une promotion pour afficher les meilleurs workers.
                 </p>
 
-                <div v-if="selectedBrandId" class="mt-4 flex justify-end">
+                <!-- Bouton de reset -->
+                <div v-if="selectedBrandId" class="mt-4 text-right">
                     <form
                         :action="route('brands.resetStats', selectedBrandId)"
                         method="POST"
                         @submit.prevent="submitReset"
                     >
                         <input type="hidden" name="_token" :value="csrfToken">
-                        <button type="submit" class="text-sm text-red-600 hover:underline">
-                            🔄 Réinitialiser les stats de cette brand
+                        <button
+                            type="submit"
+                            class="text-sm text-red-600 hover:underline"
+                        >
+                            🔄 Réinitialiser les stats de cette promotion
                         </button>
                     </form>
-
                 </div>
             </div>
-
         </div>
     </AuthenticatedLayout>
 </template>

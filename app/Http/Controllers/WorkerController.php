@@ -18,11 +18,9 @@ class WorkerController extends Controller
     {
         $query = Worker::query()->with('currentContract.brand');
 
-        // Filtres
+        // 🔍 Filtres
         if ($request->filled('brand_id')) {
-            $query->whereHas('currentContract', function ($q) use ($request) {
-                $q->where('brand_id', $request->brand_id);
-            });
+            $query->whereHas('currentContract', fn($q) => $q->where('brand_id', $request->brand_id));
         }
 
         if ($request->filled('category') && WorkerCategory::tryFrom($request->category)) {
@@ -33,15 +31,27 @@ class WorkerController extends Controller
             $query->where('style', $request->style);
         }
 
-        // Tri
+        // 🔃 Tri
         $sortField = $request->get('sort', 'lastname');
         $sortDirection = $request->get('direction', 'asc');
 
-        if (in_array($sortField, ['lastname', 'firstname', 'popularity', 'overall'])) {
+        if (in_array($sortField, ['lastname', 'firstname', 'popularity', 'overall', 'endurance'])) {
             $query->orderBy($sortField, $sortDirection);
         }
 
-        // Récupération
+        if ($sortField === 'performanceScore') {
+            $query->orderByRaw('(wins * 3 + draws) ' . $sortDirection);
+        }
+
+        if ($sortField === 'brand') {
+            $query->leftJoin('contracts as c', 'workers.id', '=', 'c.worker_id')
+                ->leftJoin('brands as b', 'c.brand_id', '=', 'b.id')
+                ->where('c.is_active', true)
+                ->orderBy('b.name', $sortDirection)
+                ->select('workers.*');
+        }
+
+        // 📦 Chargement
         $workers = $query->get()->map(fn ($worker) => [
             'id' => $worker->id,
             'firstname' => $worker->firstname,
@@ -70,6 +80,7 @@ class WorkerController extends Controller
             ],
         ]);
 
+        // Enums
         $categories = collect(WorkerCategory::cases())->map(fn($case) => [
             'label' => $case->displayName(),
             'value' => $case->value,
@@ -89,9 +100,6 @@ class WorkerController extends Controller
         ]);
     }
 
-    /**
-     * Optionnel : API JSON d’un seul worker pour modal AJAX (si besoin).
-     */
     public function show(Worker $worker)
     {
         $worker->load('currentContract.brand');
