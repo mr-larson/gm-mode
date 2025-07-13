@@ -2,16 +2,22 @@
 
 namespace Database\Seeders;
 
+use App\Models\GameSession;
 use App\Models\Brand;
 use App\Models\User;
-use Illuminate\Database\Seeder;
 use App\Enums\BrandStyle;
+use Illuminate\Database\Seeder;
 
 class BrandSeeder extends Seeder
 {
     public function run(): void
     {
         $user = User::first();
+        $session = GameSession::firstOrCreate([
+            'user_id' => $user->id,
+            'name' => 'Session Test',
+            'started_at' => now(),
+        ]);
 
         $brands = [
             [
@@ -101,7 +107,10 @@ class BrandSeeder extends Seeder
         ];
 
         foreach ($brands as $data) {
-            Brand::create(array_merge($data, ['user_id' => $user->id]));
+            Brand::create(array_merge($data, [
+                'user_id' => $user->id,
+                'game_session_id' => $session->id,
+            ]));
         }
     }
 }

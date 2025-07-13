@@ -26,8 +26,15 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('brands_and_shows', function (Blueprint $table) {
-            //
+        Schema::table('brands', function (Blueprint $table) {
+            $table->dropForeign(['game_session_id']);
+            $table->dropColumn('game_session_id');
         });
+
+        Schema::table('shows', function (Blueprint $table) {
+            $table->dropForeign(['game_session_id']);
+            $table->dropColumn('game_session_id');
+        });
+
     }
 };
