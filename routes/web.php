@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\GameSessionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\BrandController;
@@ -16,8 +17,8 @@ Route::get('/', function () {
     ]);
 });
 
-use App\Http\Controllers\GameSessionController;
 
+Route::get('/sessions', [GameSessionController::class, 'index'])->name('sessions.index');
 Route::get('/sessions/create', [GameSessionController::class, 'create'])->name('sessions.create');
 Route::post('/sessions', [GameSessionController::class, 'store'])->name('sessions.store');
 Route::get('/sessions/{session}/dashboard', [GameSessionController::class, 'dashboard'])->name('sessions.dashboard');

@@ -9,6 +9,13 @@ use Inertia\Inertia;
 
 class GameSessionController extends Controller
 {
+    public function index()
+    {
+        return Inertia::render('GameSessions/Index', [
+            'sessions' => GameSession::with('brands:id,name,color')->get(),
+        ]);
+    }
+
     public function create()
     {
         return Inertia::render('GameSessions/Create', [
