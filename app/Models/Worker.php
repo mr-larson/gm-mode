@@ -12,6 +12,18 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property mixed $id
+ * @property mixed $firstname
+ * @property mixed $lastname
+ * @property mixed $nickname
+ * @property mixed $gender
+ * @property mixed $age
+ * @property mixed $style
+ * @property mixed $status
+ * @property mixed $category
+ * @property mixed $alignment
+ */
 class Worker extends Model
 {
     use HasFactory, SoftDeletes;
@@ -65,7 +77,12 @@ class Worker extends Model
         'losses'      => 'integer',
     ];
 
-    // 🔗 Relations
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
     public function contracts()
     {
         return $this->hasMany(Contract::class);
@@ -81,7 +98,12 @@ class Worker extends Model
         return $this->belongsTo(User::class);
     }
 
-    // 🧾 Accessors
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS / HELPERS
+    |--------------------------------------------------------------------------
+    */
+
     public function getFullNameAttribute(): string
     {
         return trim("{$this->firstname} {$this->lastname}");
@@ -98,7 +120,7 @@ class Worker extends Model
         return $total > 0 ? round(($this->wins / $total) * 100, 1) : 0;
     }
 
-    // 🔄 Reset des stats pour une brand
+    // Reset des stats pour une brand
     public static function resetStatsByBrand(int $brandId): void
     {
         self::where('brand_id', $brandId)->update([

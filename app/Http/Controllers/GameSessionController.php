@@ -25,23 +25,27 @@ class GameSessionController extends Controller
 
     public function store(Request $request)
     {
+        // 1) Validation des entrées
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
+            'name'     => 'required|string|max:255',
             'brand_id' => 'required|exists:brands,id',
         ]);
 
+        // 2) Création de la GameSession
         $session = GameSession::create([
-            'name' => $validated['name'],
+            'name'       => $validated['name'],
+            'user_id'    => $request->user()->id,
+            'started_at' => now(),
+            'is_active'  => true,
         ]);
 
-        // Attacher la brand choisie à la session
-        $brand = Brand::find($validated['brand_id']);
-        $brand->update(['game_session_id' => $session->id]);
+        // 3) On assigne la brand sélectionnée à cette partie
+        Brand::findOrFail($validated['brand_id'])
+            ->update(['game_session_id' => $session->id]);
 
-        // Tu pourras ajouter ici la logique pour :
-        // - affecter des workers à chaque brand
-        // - initialiser les stats
+        // 4) (Optionnel) Logique d'initialisation de draft, d'affectation de workers, etc.
 
+        // 5) Redirection vers le dashboard de la partie
         return redirect()->route('sessions.dashboard', $session);
     }
 

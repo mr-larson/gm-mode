@@ -52,7 +52,7 @@ const topWorkers = computed(() => {
                     <p><strong>Style :</strong> {{ brand.style }}</p>
                     <p><strong>Popularité :</strong> {{ brand.popularity }}</p>
                     <p><strong>Budget :</strong> {{ brand.money }}</p>
-                    <p><strong>Fondé :</strong> {{ brand.founded }}</p>
+                    <p><strong>Fondé :</strong> {{ brand.founded_formatted }}</p>
                     <p><strong>Booker :</strong> {{ brand.booker }}</p>
                 </div>
                 <div>

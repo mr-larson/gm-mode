@@ -11,6 +11,12 @@ class Contract extends Model
 
     protected $fillable = ['worker_id', 'brand_id', 'start_date', 'end_date', 'salary', 'is_active'];
 
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
     public function worker()
     {
         return $this->belongsTo(Worker::class);

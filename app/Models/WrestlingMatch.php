@@ -20,7 +20,11 @@ class WrestlingMatch extends Model
         'type' => MatchType::class,
     ];
 
-    // 🔗 Relations
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function show()
     {
@@ -34,7 +38,12 @@ class WrestlingMatch extends Model
             ->withTimestamps();
     }
 
-    // 🧠 Helpers
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS / HELPERS
+    |--------------------------------------------------------------------------
+    */
+
     public function winners()
     {
         return $this->workers()->wherePivot('is_winner', true);

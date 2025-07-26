@@ -16,7 +16,7 @@ class Brand extends Model
     use SoftDeletes;
 
     protected $table = 'brands';
-    protected $appends = ['ranked_workers'];
+    protected $appends = ['ranked_workers', 'founded_formatted'];
 
     protected $fillable = [
         'name', 'owner', 'booker', 'based_in', 'country',
@@ -31,7 +31,11 @@ class Brand extends Model
         'color' => BrandColor::class,
     ];
 
-    // Relations
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function user(): BelongsTo
     {
@@ -65,7 +69,12 @@ class Brand extends Model
         return $this->hasMany(Show::class);
     }
 
-// Accessors
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS / HELPERS
+    |--------------------------------------------------------------------------
+    */
+
     public function getRankedWorkersAttribute()
     {
         return $this->workers()
@@ -73,6 +82,9 @@ class Brand extends Model
             ->sortByDesc(fn($worker) => $worker->wins * 3 + $worker->draws);
     }
 
-
+    public function getFoundedFormattedAttribute(): ?string
+    {
+        return $this->founded?->format('d/m/Y'); // ou 'Y-m-d'
+    }
 }
 

@@ -68,7 +68,7 @@ class WorkerController extends Controller
             'overall' => $worker->overall,
             'popularity' => $worker->popularity,
             'endurance' => $worker->endurance,
-            'promo' => $worker->promo_skill, // Pour la vue
+            'promo' => $worker->promo_skill,
             'wins' => $worker->wins,
             'draws' => $worker->draws,
             'losses' => $worker->losses,

@@ -13,7 +13,7 @@ class Promo extends Model
     protected $fillable = [
         'show_id',
         'type',
-        'worker_id', // principal speaker (optionnel)
+        'worker_id',
         'content',
     ];
 
@@ -21,7 +21,11 @@ class Promo extends Model
         'type' => PromoType::class,
     ];
 
-    // 🔗 Relations
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
 
     public function show()
     {

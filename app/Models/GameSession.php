@@ -23,7 +23,12 @@ class GameSession extends Model
         'started_at' => 'date',
     ];
 
-    // 🧩 Relations
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONS
+    |--------------------------------------------------------------------------
+    */
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -36,7 +41,7 @@ class GameSession extends Model
 
     public function brands()
     {
-        return $this->hasMany(Brand::class); // Si les brands sont liées à une session
+        return $this->hasMany(Brand::class);
     }
 }
 
