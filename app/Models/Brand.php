@@ -47,9 +47,34 @@ class Brand extends Model
         return $this->belongsTo(GameSession::class);
     }
 
+    public function sessions()
+    {
+        return $this->belongsToMany(GameSession::class, 'game_session_brand')
+            ->withPivot(['is_human','draft_order', 'is_draft_complete'])
+            ->withTimestamps();
+    }
+
+    public function pivotBrand(GameSession $session)
+    {
+        return $this->hasOne(GameSessionBrand::class)
+            ->where('game_session_id', $session->id);
+    }
+
     public function contracts()
     {
+        return $this->hasMany(Contract::class)->where('is_active', true);
+    }
+
+    public function allContracts()
+    {
         return $this->hasMany(Contract::class);
+    }
+
+    public function sessionContracts($sessionId)
+    {
+        return $this->allContracts()
+            ->where('game_session_id', $sessionId)
+            ->where('is_active', true);
     }
 
     public function workers()
@@ -69,6 +94,16 @@ class Brand extends Model
         return $this->hasMany(Show::class);
     }
 
+    public function remainingBudget(): int
+    {
+        return $this->money - $this->contracts->sum('salary');
+    }
+
+    public function totalSalary(): int
+    {
+        return $this->contracts->sum('salary');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | ACCESSORS / HELPERS
@@ -85,6 +120,11 @@ class Brand extends Model
     public function getFoundedFormattedAttribute(): ?string
     {
         return $this->founded?->format('d/m/Y'); // ou 'Y-m-d'
+    }
+
+    public function getRemainingBudgetFormattedAttribute(): ?string
+    {
+        return number_format($this->remainingBudget(), 0, ',', ' ');
     }
 }
 

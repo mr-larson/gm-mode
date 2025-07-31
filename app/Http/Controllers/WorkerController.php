@@ -18,7 +18,7 @@ class WorkerController extends Controller
     {
         $query = Worker::query()->with('currentContract.brand');
 
-        // 🔍 Filtres
+        // Filtres
         if ($request->filled('brand_id')) {
             $query->whereHas('currentContract', fn($q) => $q->where('brand_id', $request->brand_id));
         }
@@ -31,7 +31,7 @@ class WorkerController extends Controller
             $query->where('style', $request->style);
         }
 
-        // 🔃 Tri
+        // Tri
         $sortField = $request->get('sort', 'lastname');
         $sortDirection = $request->get('direction', 'asc');
 
@@ -51,7 +51,7 @@ class WorkerController extends Controller
                 ->select('workers.*');
         }
 
-        // 📦 Données
+        // Données
         $workers = $query->get()->map(fn ($worker) => [
             'id' => $worker->id,
             'firstname' => $worker->firstname,

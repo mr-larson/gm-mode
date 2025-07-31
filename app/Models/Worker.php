@@ -31,31 +31,11 @@ class Worker extends Model
     protected $table = 'workers';
 
     protected $fillable = [
-        'firstname',
-        'lastname',
-        'nickname',
-        'gender',
-        'age',
-        'style',
-        'status',
-        'category',
-        'alignment',
-        'height',
-        'weight',
-        'image',
-        'overall',
-        'popularity',
-        'endurance',
-        'promo_skill',
-        'wins',
-        'draws',
-        'losses',
-        'note',
-        'brand_id',
-        'user_id',
-        'created_by',
-        'updated_by',
-        'deleted_by',
+        'firstname', 'lastname', 'nickname', 'gender', 'age', 'style',
+        'status', 'category', 'alignment', 'height', 'weight', 'image',
+        'overall', 'popularity', 'endurance', 'promo_skill',
+        'wins', 'draws', 'losses', 'note',
+        'brand_id', 'user_id', 'created_by', 'updated_by', 'deleted_by',
     ];
 
     protected $casts = [
@@ -64,7 +44,6 @@ class Worker extends Model
         'category'  => WorkerCategory::class,
         'style'     => WorkerStyle::class,
         'alignment' => WorkerAlignment::class,
-
         'age'         => 'integer',
         'height'      => 'integer',
         'weight'      => 'integer',
@@ -99,6 +78,21 @@ class Worker extends Model
     }
 
     /*
+   |--------------------------------------------------------------------------
+   | Scope
+   |--------------------------------------------------------------------------
+   */
+    public function scopeDrafted($query)
+    {
+        return $query->whereHas('contracts');
+    }
+
+    public function scopeAvailable($query)
+    {
+        return $query->whereDoesntHave('contracts');
+    }
+
+    /*
     |--------------------------------------------------------------------------
     | ACCESSORS / HELPERS
     |--------------------------------------------------------------------------
@@ -120,7 +114,21 @@ class Worker extends Model
         return $total > 0 ? round(($this->wins / $total) * 100, 1) : 0;
     }
 
+    public function isAvailableForSession(GameSession $session): bool
+    {
+        return !$this->contracts()->where('game_session_id', $session->id)->exists();
+    }
+
     // Reset des stats pour une brand
+    public function initializeStats(): void
+    {
+        $this->update([
+            'wins' => 0,
+            'draws' => 0,
+            'losses' => 0,
+        ]);
+    }
+
     public static function resetStatsByBrand(int $brandId): void
     {
         self::where('brand_id', $brandId)->update([

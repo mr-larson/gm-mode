@@ -42,7 +42,11 @@ class ContractController extends Controller
      */
     public function show(Contract $contract)
     {
-        //
+        $contract->load(['worker', 'brand']);
+
+        return Inertia::render('Contracts/Show', [
+            'contract' => $contract,
+        ]);
     }
 
     /**

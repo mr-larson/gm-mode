@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
-use App\Models\GameSession;
+use App\Models\{Brand, GameSession};
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -25,33 +24,40 @@ class GameSessionController extends Controller
 
     public function store(Request $request)
     {
-        // 1) Validation des entrées
         $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'brand_id' => 'required|exists:brands,id',
         ]);
 
-        // 2) Création de la GameSession
         $session = GameSession::create([
             'name'       => $validated['name'],
-            'user_id'    => $request->user()->id,
             'started_at' => now(),
-            'is_active'  => true,
         ]);
 
-        // 3) On assigne la brand sélectionnée à cette partie
-        Brand::findOrFail($validated['brand_id'])
-            ->update(['game_session_id' => $session->id]);
+        $allBrands     = Brand::pluck('id')->toArray();
+        $playerBrandId = $validated['brand_id'];
+        $others = array_diff($allBrands, [$playerBrandId]);
+        shuffle($others);
+        $draftOrderList = array_merge([$playerBrandId], $others);
 
-        // 4) (Optionnel) Logique d'initialisation de draft, d'affectation de workers, etc.
+        foreach ($draftOrderList as $index => $brandId) {
+            $session->pivotBrands()->create([
+                'brand_id'    => $brandId,
+                'is_human'    => $brandId == $playerBrandId,
+                'draft_order' => $index + 1,
+            ]);
+        }
 
-        // 5) Redirection vers le dashboard de la partie
-        return redirect()->route('sessions.dashboard', $session);
+        return redirect()->route('sessions.draft', $session);
     }
 
     public function dashboard(GameSession $session)
     {
-        $session->load('brands.workers');
+        $session->load('pivotBrands.brand');
+
+        foreach ($session->pivotBrands as $pivot) {
+            $pivot->brand->load('workers');
+        }
 
         return Inertia::render('GameSessions/Dashboard', [
             'session' => $session,
